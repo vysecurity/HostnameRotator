@@ -41,3 +41,67 @@ Modify the `hostnames.txt` file to add or remove hostname patterns. Each line re
 *   macOS
 *   Bash shell (standard on macOS)
 *   Root privileges (`sudo`) to modify system settings.
+
+## Scheduling (macOS)
+
+To run this script automatically (e.g., daily), you can use `launchd`, macOS's service manager. This requires creating a `.plist` configuration file in `/Library/LaunchDaemons/`.
+
+1.  **Create a `.plist` file:**
+    Create a file named `com.yourdomain.rotatehostname.plist` (replace `yourdomain` with something relevant) in `/Library/LaunchDaemons/` using `sudo` and a text editor. Paste the following content, **making sure to replace the placeholder paths** with the actual full paths to the script and its directory:
+
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+        <key>Label</key>
+        <string>com.yourdomain.rotatehostname</string> <!-- Choose a unique label -->
+
+        <key>ProgramArguments</key>
+        <array>
+            <!-- Full path to your script -->
+            <string>/path/to/your/script/rotate_hostname.sh</string>
+        </array>
+
+        <key>WorkingDirectory</key>
+        <!-- Full path to the directory containing the script -->
+        <string>/path/to/your/script/directory</string>
+
+        <key>RunAtLoad</key>
+        <false/>
+
+        <key>StartCalendarInterval</key>
+        <dict>
+            <!-- Example: Run daily at 3:00 AM -->
+            <key>Hour</key>
+            <integer>3</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+
+        <!-- Optional: Redirect output/errors to logs -->
+        <!--
+        <key>StandardOutPath</key>
+        <string>/var/log/rotatehostname.log</string>
+        <key>StandardErrorPath</key>
+        <string>/var/log/rotatehostname.error.log</string>
+        -->
+
+    </dict>
+    </plist>
+    ```
+
+2.  **Set Permissions:**
+    Ensure the file is owned by root:
+    ```bash
+    sudo chown root:wheel /Library/LaunchDaemons/com.yourdomain.rotatehostname.plist
+    sudo chmod 644 /Library/LaunchDaemons/com.yourdomain.rotatehostname.plist
+    ```
+
+3.  **Load the Job:**
+    Tell `launchd` to load and enable the job:
+    ```bash
+    sudo launchctl load -w /Library/LaunchDaemons/com.yourdomain.rotatehostname.plist
+    ```
+
+The script will now run automatically based on the `StartCalendarInterval` defined in the `.plist` file.
