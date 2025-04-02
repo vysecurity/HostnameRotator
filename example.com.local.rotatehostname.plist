@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <!-- Choose a unique label, e.g., com.yourdomain.rotatehostname -->
+    <string>com.example.rotatehostname</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <!-- IMPORTANT: Replace with the *full absolute path* to your rotate_hostname.sh script -->
+        <string>/path/to/your/script/rotate_hostname.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <!-- IMPORTANT: Replace with the *full absolute path* to the directory containing the script -->
+    <string>/path/to/your/script/directory</string>
+
+    <key>RunAtLoad</key>
+    <!-- Set to true to run once immediately upon loading, false to wait for schedule -->
+    <false/>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <!-- Example: Run daily at 3:00 AM -->
+        <key>Hour</key>
+        <integer>3</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+        <!-- Other keys like 'Weekday' or 'Day' can be added for more complex schedules -->
+    </dict>
+
+    <!-- Optional: Redirect stdout and stderr to log files for debugging -->
+    <!-- Ensure the log directory exists and has appropriate permissions -->
+    <!--
+    <key>StandardOutPath</key>
+    <string>/var/log/rotatehostname.log</string>
+    <key>StandardErrorPath</key>
+    <string>/var/log/rotatehostname.error.log</string>
+    -->
+
+</dict>
+</plist>
